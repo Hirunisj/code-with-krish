@@ -21,9 +21,9 @@ app.get('/number/sort', (req, res) => {
     const sortedArray = sortArray(req, res);
 });
 
-// app.get('/number/search', (req, res) => {
-//     const searchResult = searchNumber(req, res);
-// });
+app.get('/number/count', (req, res) => {
+    const searchResult = searchNumber(req, res);
+});
 
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`);

@@ -14,6 +14,7 @@ function minNumber(req, res){
     })
 
 }
+
 function maxNumber (req, res) {
     const num1 = parseFloat(req.query.num1);
     const num2 = parseFloat(req.query.num2);
@@ -48,7 +49,7 @@ function avgValue(req, res) {
 
  function sortArray(req, res) {
     const nums = req.query.numbers;
-    const order = req.query.order;
+    const order = req.query.type;
 
     if (!nums) {
         return res.status(400).send({
@@ -77,18 +78,24 @@ function avgValue(req, res) {
     });
 }
 
-// function searchNumber(req, res) {
-//     const text = req.query.text;
-//     const target = req.query.target;
+function searchNumber(req, res) {
+    const numbers = req.query.numbers;
+    const search = req.query.search;
 
-//     if (!text || !target) {
-//         return res.status(400).send({
-//             error: "Text and target are required"
-//         });
-//     }
-    
+    const numArray = numbers.split(',');
+    let count = 0;
+
+    for( let i = 0; i< numArray.length; i++){
+        
+        if (numArray[i]== search){
+            count++;
+        }
+    }
+    return res.status(200).send({
+        data : count
+    })   
      
-// }
+}
 
 
 
