@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, Query } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
 import { Inventory } from './entity/inventory.entity';
@@ -23,8 +23,8 @@ export class InventoryController {
     }
 
     @Get(':id/validate')
-    async validateStock(@Param('id') id: number): Promise<boolean> {
-        const product = await this.inventoryService.findOne(id);
-        return product.quantity > 0;
+    async validateStock(@Param('id') id: number, @Query('quantity') quantity: number): Promise<{ available: boolean }> {
+        const isAvailable = await this.inventoryService.validateStock(id, quantity);
+        return { available: isAvailable };
     }
 }

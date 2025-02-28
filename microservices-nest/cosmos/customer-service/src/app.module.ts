@@ -21,6 +21,5 @@ import { Customer } from './customers/entity/customer.entity';
 
   ]
  
-
 })
 export class AppModule {}

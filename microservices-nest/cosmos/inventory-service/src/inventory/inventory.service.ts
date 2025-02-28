@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateInventoryDto } from './dto/create-inventory.dto';
@@ -12,6 +12,20 @@ export class InventoryService {
     ) {}
 
     async create(createInventoryDto: CreateInventoryDto): Promise<Inventory> {
+        const { name, quantity, price } = createInventoryDto;
+    
+        if (!name || typeof name !== 'string') {
+            throw new BadRequestException('Name must be a non-empty string');
+        }
+    
+        if (!quantity || typeof quantity !== 'number' || quantity < 0) {
+            throw new BadRequestException('Quantity must be a non-negative number');
+        }
+    
+        if (!price || typeof price !== 'number' || price < 0) {
+            throw new BadRequestException('Price must be a non-negative number');
+        }
+    
         const product = this.inventoryRepository.create(createInventoryDto);
         return await this.inventoryRepository.save(product);
     }

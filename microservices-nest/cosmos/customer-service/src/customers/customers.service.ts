@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -12,6 +12,20 @@ export class CustomersService {
     ) {}
 
     async create(createCustomerDto: CreateCustomerDto): Promise<Customer> {
+        const { name, email, address } = createCustomerDto;
+
+        if (!name || typeof name !== 'string') {
+            throw new BadRequestException('Name must be a non-empty string');
+        }
+
+        if (!email || typeof email !== 'string') {
+            throw new BadRequestException('Email must be a non-empty string');
+        }
+
+        if (typeof address !== 'string') {
+            throw new BadRequestException('Address must be a string');
+        }
+
         const customer = this.customersRepository.create(createCustomerDto);
         return await this.customersRepository.save(customer);
     }
