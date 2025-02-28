@@ -15,15 +15,15 @@ export class InventoryService {
         const { name, quantity, price } = createInventoryDto;
     
         if (!name || typeof name !== 'string') {
-            throw new BadRequestException('Name must be a non-empty string');
+            throw new BadRequestException('Name cannot be a empty string');
         }
     
         if (!quantity || typeof quantity !== 'number' || quantity < 0) {
-            throw new BadRequestException('Quantity must be a non-negative number');
+            throw new BadRequestException('Quantity should be there and be a non-negative number');
         }
     
         if (!price || typeof price !== 'number' || price < 0) {
-            throw new BadRequestException('Price must be a non-negative number');
+            throw new BadRequestException('Price should be thereand be a non-negative number');
         }
     
         const product = this.inventoryRepository.create(createInventoryDto);

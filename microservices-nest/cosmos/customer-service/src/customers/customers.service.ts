@@ -15,15 +15,15 @@ export class CustomersService {
         const { name, email, address } = createCustomerDto;
 
         if (!name || typeof name !== 'string') {
-            throw new BadRequestException('Name must be a non-empty string');
+            throw new BadRequestException('Name should be there and should be a string');
         }
 
         if (!email || typeof email !== 'string') {
-            throw new BadRequestException('Email must be a non-empty string');
+            throw new BadRequestException('Email should be there and should be a string');
         }
 
         if (typeof address !== 'string') {
-            throw new BadRequestException('Address must be a string');
+            throw new BadRequestException('Address shold be a string');
         }
 
         const customer = this.customersRepository.create(createCustomerDto);
