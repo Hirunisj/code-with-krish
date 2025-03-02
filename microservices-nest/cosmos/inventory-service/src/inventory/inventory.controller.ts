@@ -27,4 +27,12 @@ export class InventoryController {
         const isAvailable = await this.inventoryService.validateStock(id, quantity);
         return { available: isAvailable };
     }
+
+    @Post(':id/quantity')
+    async reduceStock(
+        @Param('id') id: number,
+        @Body('quantity') quantity: number
+    ): Promise<Inventory> {
+        return this.inventoryService.reduceStock(id, quantity);
+    }
 }

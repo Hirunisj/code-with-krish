@@ -38,6 +38,21 @@ export class InventoryService {
         return await this.inventoryRepository.findOne({ where: { id } });
     }
 
+    async reduceStock(id: number, quantity: number): Promise<Inventory> {
+        const product = await this.findOne(id);
+        
+        if (!product) {
+            throw new BadRequestException('Product not found');
+        }
+        
+        if (product.quantity < quantity) {
+            throw new BadRequestException('Insufficient stock');
+        }
+        
+        product.quantity -= quantity;
+        return await this.inventoryRepository.save(product);
+    }
+
     async validateStock(id: number, quantity: number): Promise<boolean> {
         const product = await this.findOne(id);
         return product ? product.quantity >= quantity : false;

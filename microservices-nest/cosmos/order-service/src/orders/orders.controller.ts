@@ -11,11 +11,17 @@ export class OrdersController {
         return await this.ordersService.create(createOrderDto);
     }
 
-    @Get(':id')
-    async fetch(@Param('id') id: number) {
-        return await this.ordersService.fetch(id);
+    // @Get(':id')
+    // async fetch(@Param('id') id: number) {
+    //     return await this.ordersService.fetch(id);
         
+    // }
+
+    @Get('all')
+    async fetchAll() {
+        return await this.ordersService.fetchAll();
     }
+
     //pending
 
     @Patch(':id/status')
