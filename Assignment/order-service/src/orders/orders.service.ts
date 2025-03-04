@@ -38,7 +38,7 @@ export class OrdersService {
   }
 
  async create(createOrderDto: createOrderDto): Promise<any> {
-    const { customerId, items } = createOrderDto;
+    const { customerId, items, city } = createOrderDto;
     //--------customer
     // Validate customer exists
     let customerName = '';
@@ -69,7 +69,7 @@ export class OrdersService {
 
     this.producer.send({
       topic: 'hiruni.order.create', 
-      messages: [{ value: JSON.stringify({ customerId, items }) }],
+      messages: [{ value: JSON.stringify({ customerId, items, city }) }],
     });
     return { message: 'Order is placed. Waiting inventory service to process' };
 
@@ -155,17 +155,17 @@ export class OrdersService {
     return await this.orderRepository.save(order);
   }
 
-   async consumedConfirmedOrder() {
+  async consumedConfirmedOrder() {
     await this.consumer.subscribe({ topic: 'hiruni.inventory.update' });
     await this.consumer.run({
       eachMessage: async ({message}) => {
         console.log('----------new order confirmation arrived----------');
-        const {customerId, item} = JSON.parse(message.value.toString());
+        const {customerId, item, city} = JSON.parse(message.value.toString());
         
-        // Save to database
         const order = this.orderRepository.create({
           customerId,
           status: 'CONFIRMED',
+          city, 
         });
         const savedOrder = await this.orderRepository.save(order);
         const orderItems = item.map((item) =>
@@ -178,7 +178,6 @@ export class OrdersService {
         );
         const savedOrderItems = await this.orderItemRepository.save(orderItems);
   
-        // Publish order.confirmed event
         await this.producer.send({
           topic: 'hiruni.order.confirmed',
           messages: [{
@@ -186,6 +185,7 @@ export class OrdersService {
               orderId: savedOrder.id,
               customerId: savedOrder.customerId,
               status: savedOrder.status,
+              city: savedOrder.city, 
               items: savedOrderItems
             })
           }]

@@ -8,6 +8,7 @@ class OrderItemDto {
   price: number;
   @IsInt()
   quantity: number;
+  
 }
 
 export class createOrderDto {
@@ -17,4 +18,6 @@ export class createOrderDto {
   @ValidateNested({ each: true })
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
+  @IsInt()
+  city:String;
 }
